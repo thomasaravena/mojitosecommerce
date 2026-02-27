@@ -1,0 +1,75 @@
+:root {
+    --primary-green: #76ba1b;
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #fcfcfc;
+}
+
+/* Navbar con efecto vidrio */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.navbar-brand span {
+    color: var(--primary-green);
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero-section {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.2)), 
+                url('https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1600') center/cover;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 25px;
+    border: 1px solid var(--glass-border);
+    color: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* Botones y Precios */
+.btn-primary-custom {
+    background-color: var(--primary-green);
+    border: none;
+    color: white;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: #5a8d14;
+    transform: translateY(-3px);
+}
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-green);
+}
+
+.card-mojito {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.card-mojito:hover {
+    transform: scale(1.02);
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mojito Master | Sabor Tropical</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}"><span>Mojito</span>Master</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sabores">Sabores</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-pedido" th:href="@{/pedidos}">Pedir Ahora</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section d-flex align-items-center">
+        <div class="container text-center">
+            <div class="glass-card p-5">
+                <h1 class="display-3 fw-bold">El frescor del Caribe <br><span>en Chile</span></h1>
+                <p class="lead mt-3">Mojitos artesanales con fruta natural, directo a tu mesa.</p>
+                <div class="mt-4">
+                    <a href="#sabores" class="btn btn-primary-custom me-3">Ver Carta</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="sabores" class="py-5">
+        <div class="container py-5">
+            <h2 class="text-center mb-5">Nuestros Mojitos</h2>
+            <div class="row g-4">
+                <div class="col-md-4" th:each="producto : ${listaProductos}">
+                    <div class="card-mojito">
+                        <img th:src="${producto.imagenUrl}" class="img-fluid" alt="Mojito">
+                        <div class="card-info">
+                            <h3 th:text="${producto.nombre}">Mojito Clásico</h3>
+                            <p th:text="${producto.descripcion}">Menta fresca y ron.</p>
+                            <span class="price" th:text="'$' + ${producto.precio}">$5.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
