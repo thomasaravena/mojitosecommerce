@@ -28,8 +28,9 @@
             </h2>
             
             <div class="neon-card">
-                <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post">
+                <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
                     <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{imagenUrl}">
 
                     <label>NOMBRE DEL SABOR</label>
                     <input type="text" th:field="*{nombre}" class="form-control" placeholder="Ej: Mojito Berries" required>
@@ -48,8 +49,8 @@
                         </div>
                     </div>
 
-                    <label>URL DE LA IMAGEN (URL PÚBLICA)</label>
-                    <input type="text" th:field="*{imagenUrl}" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+                    <label>FOTO DEL MOJITO (ARCHIVO LOCAL)</label>
+                    <input type="file" name="file" class="form-control" accept="image/*">
 
                     <div class="mt-5 d-flex justify-content-between">
                         <a th:href="@{/admin/productos}" class="btn btn-outline-secondary px-4 text-white">VOLVER</a>
