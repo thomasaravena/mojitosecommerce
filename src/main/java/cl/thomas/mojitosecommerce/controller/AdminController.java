@@ -14,28 +14,36 @@ public class AdminController {
     @Autowired
     private ProductoService productoService;
 
-    // Ruta principal del panel: muestra la lista de productos
+    // Listado Neón
     @GetMapping("/productos")
     public String panelAdmin(Model model) {
         model.addAttribute("productos", productoService.listarTodos());
         return "admin/productos-lista"; 
     }
 
-    // Ruta para mostrar el formulario de nuevo producto
+    // Formulario Nuevo
     @GetMapping("/productos/nuevo")
     public String formularioNuevo(Model model) {
         model.addAttribute("producto", new Producto());
         return "admin/producto-form";
     }
 
-    // Guardar el producto (Crear o Editar)
+    // Editar (Usa el service para buscar el existente)
+    @GetMapping("/productos/editar/{id}")
+    public String formularioEditar(@PathVariable Long id, Model model) {
+        Producto producto = productoService.obtenerPorId(id);
+        model.addAttribute("producto", producto);
+        return "admin/producto-form";
+    }
+
+    // Guardar (POST)
     @PostMapping("/productos/guardar")
     public String guardarProducto(@ModelAttribute Producto producto) {
         productoService.guardar(producto);
         return "redirect:/admin/productos";
     }
 
-    // Eliminar producto
+    // Eliminar
     @GetMapping("/productos/eliminar/{id}")
     public String eliminarProducto(@PathVariable Long id) {
         productoService.eliminar(id);

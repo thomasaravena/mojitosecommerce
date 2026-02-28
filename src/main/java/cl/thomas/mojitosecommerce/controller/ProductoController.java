@@ -50,8 +50,8 @@ public class ProductoController {
     // 4. EDITAR PRODUCTO
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model, RedirectAttributes flash) {
-        Producto producto = productoService.buscarPorId(id);
-        if (producto == null) {
+    	Producto producto = productoService.obtenerPorId(id);
+    	if (producto == null) {
             flash.addFlashAttribute("mensajeError", "El producto no existe.");
             return "redirect:/productos/admin";
         }

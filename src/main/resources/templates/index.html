@@ -1,65 +1,181 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mojito Master | Sabor Tropical</title>
+    <title>Mojito Master | Neon Experience</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <link rel="stylesheet" th:href="@{assets/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --dark-bg: #050505;
+            --neon-green: #39ff14;
+            --neon-purple: #bc13fe;
+            --neon-blue: #00f3ff;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar Neón --- */
+        .glass-nav {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-blue);
+            padding: 15px 0;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .bienvenida span {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            font-weight: bold;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1974&auto=format&fit=crop') center/cover;
+            display: flex;
+            align-items: center;
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 20, 0.7);
+            border: 1px solid var(--neon-purple);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+        h1 span { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
+
+        /* --- Botones Iluminados --- */
+        .btn-neon-blue {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn-neon-blue:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 25px var(--neon-blue);
+        }
+
+        /* --- Cards de Productos --- */
+        .card-mojito {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.4s;
+            height: 100%;
+        }
+
+        .card-mojito:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.15);
+        }
+
+        .card-mojito img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            filter: brightness(0.8);
+            transition: 0.4s;
+        }
+
+        .card-mojito:hover img { filter: brightness(1); }
+
+        .card-info { padding: 20px; text-align: center; }
+        .card-info h3 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: white; }
+        
+        .price {
+            display: block;
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+            text-shadow: 0 0 10px var(--neon-purple);
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top glass-nav">
-        <div class="ms-auto d-flex align-items-center">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white" href="#" style="font-family: 'Orbitron';">
+                MOJITO<span style="color:var(--neon-blue)">MASTER</span>
+            </a>
+            
+            <div class="ms-auto d-flex align-items-center">
+                <div class="bienvenida me-3" sec:authorize="hasRole('ADMIN')">
+                    <p class="mb-0 small">ADMIN: <span th:text="${#authentication.name}">Usuario</span></p>
+                </div>
 
-				<div class="bienvenida me-3" sec:authorize="hasRole('ADMIN')">
-					<p class="mb-0">
-						Hola, <span th:text="${#authentication.name}">Usuario</span>
-					</p>
-				</div>
+                <div class="bienvenida me-3" sec:authorize="hasRole('USER')">
+                    <p class="mb-0 small">Hola, <span th:text="${#authentication.name}">Usuario</span></p>
+                </div>
 
-				<div class="bienvenida me-3" sec:authorize="hasRole('USER')">
-					<p class="mb-0">
-						Hola, <span th:text="${#authentication.name}">Usuario</span>
-					</p>
-				</div>
+                <a th:href="@{/admin/consultas}" sec:authorize="hasRole('ADMIN')" class="text-white me-3" title="Panel Admin">
+                    <i class="bi bi-speedometer2 fs-5"></i>
+                </a>
+                
+                <a th:href="@{/panel}" sec:authorize="hasRole('USER')" class="text-white me-3">
+                    <i class="bi bi-person-badge fs-5"></i>
+                </a>
 
-				<a href="/admin/planes" sec:authorize="hasRole('ADMIN')"
-					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
-				</a> <a th:href="@{/panel}" sec:authorize="hasRole('USER')"
-					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
-				</a> <a href="/carrito/ver" sec:authorize="hasRole('USER')"
-					class="btn btn-link text-dark position-relative p-0"> <i
-					class="bi bi-cart-fill fs-5"></i> <span
-					class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-					style="font-size: 0.6rem;" th:text="${itemsCount}"> 0 </span>
-				</a>
-				<div class="ms-auto">
-					<a th:href="@{/login}" sec:authorize="isAnonymous()"
-						class="btn btn-outline-light px-4 shadow-sm"> <i
-						class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
-					</a>
-				</div>
-				<form sec:authorize="isAuthenticated()" th:action="@{/logout}"
-					method="post">
-					<button type="submit" class="btn btn-link btn-sm text-muted">Cerrar
-						Sesión</button>
-				</form>
+                <a th:href="@{/carrito/ver}" sec:authorize="hasRole('USER')" class="btn btn-link text-white position-relative p-0 me-3">
+                    <i class="bi bi-cart-fill fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;" th:text="${itemsCount}">0</span>
+                </a>
 
-			</div>
+                <a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn btn-neon-blue px-4">
+                    LOGIN
+                </a>
+
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                        <i class="bi bi-power"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </nav>
 
-    <header class="hero-section d-flex align-items-center">
+    <header class="hero-section">
         <div class="container text-center">
-            <div class="glass-card p-5">
-                <h1 class="display-3 fw-bold">El frescor del Caribe <br><span>en Chile</span></h1>
-                <p class="lead mt-3">Mojitos artesanales con fruta natural, directo a tu mesa.</p>
+            <div class="glass-card p-5 mx-auto" style="max-width: 800px;">
+                <h1 class="display-3 fw-bold">EL FRESCOR DEL CARIBE <br><span>EN CHILE</span></h1>
+                <p class="lead mt-3 text-white-50">Mojitos artesanales con fruta natural, con el brillo de la noche tropical.</p>
                 <div class="mt-4">
-                    <a href="#sabores" class="btn btn-primary-custom me-3">Ver Carta</a>
+                    <a href="#sabores" class="btn btn-neon-blue btn-lg px-5">VER CARTA</a>
                 </div>
             </div>
         </div>
@@ -67,15 +183,18 @@
 
     <section id="sabores" class="py-5">
         <div class="container py-5">
-            <h2 class="text-center mb-5">Nuestros Mojitos</h2>
+            <h2 class="section-title h1">NUESTROS MOJITOS</h2>
             <div class="row g-4">
                 <div class="col-md-4" th:each="producto : ${listaProductos}">
                     <div class="card-mojito">
-                        <img th:src="${producto.imagenUrl}" class="img-fluid" alt="Mojito">
+                        <img th:src="${producto.imagenUrl}" alt="Mojito">
                         <div class="card-info">
                             <h3 th:text="${producto.nombre}">Mojito Clásico</h3>
-                            <p th:text="${producto.descripcion}">Menta fresca y ron.</p>
+                            <p class="text-white-50 small" th:text="${producto.descripcion}">Menta fresca y ron.</p>
                             <span class="price" th:text="'$' + ${producto.precio}">$5.000</span>
+                            <div class="mt-3" sec:authorize="hasRole('USER')">
+                                <a th:href="@{/carrito/agregar/{id}(id=${producto.id})}" class="btn btn-neon-blue btn-sm w-100">AGREGAR</a>
+                            </div>
                         </div>
                     </div>
                 </div>

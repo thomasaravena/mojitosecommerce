@@ -2,84 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Carta | Mojito Master</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Nuestra Carta | Mojito Master Neon</title>
+    <th:block th:replace="~{admin/fragments :: head}"></th:block>
+    <style>
+        .card-mojito { background: #111; border: 1px solid #333; transition: 0.4s; border-radius: 15px; overflow: hidden; }
+        .card-mojito:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+        .price { color: var(--neon-green); font-family: 'Orbitron'; font-size: 1.4rem; }
+        .input-group-text { background: #222; border: 1px solid #444; color: var(--neon-blue); }
+        .form-control { background: #000; border: 1px solid #444; color: white; }
+    </style>
 </head>
-<body class="bg-light">
+<body style="background-color: #050505; color: white;">
 
     <nav class="navbar navbar-expand-lg fixed-top glass-nav">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/}"><span>Mojito</span>Master</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link active" th:href="@{/productos}">Catálogo</a></li>
-                    <li class="nav-item ms-lg-3">
-                        <a class="nav-link position-relative" th:href="@{/carrito}">
-                            <i class="fa-solid fa-cart-shopping fa-lg"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <span th:text="${session.carritoSize != null ? session.carritoSize : '0'}">0</span>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
+            <a class="navbar-brand text-white fw-bold" th:href="@{/}" style="font-family: 'Orbitron';">MOJITO<span style="color:var(--neon-blue)">MASTER</span></a>
+            <div class="ms-auto d-flex align-items-center">
+                <a th:href="@{/}" class="btn btn-neon-blue btn-sm me-3">INICIO</a>
+                <a th:href="@{/carrito/ver}" class="text-white position-relative">
+                    <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" th:text="${itemsCount}">0</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <header class="py-5 mt-5" style="background: var(--primary-green); color: white;">
-        <div class="container text-center pt-4">
-            <h2 class="display-4 fw-bold">Nuestra Carta</h2>
-            <p class="lead">Selecciona tus sabores favoritos y recíbelos en casa.</p>
-        </div>
+    <header class="py-5 mt-5 text-center">
+        <h2 class="display-4 fw-bold neon-text-purple" style="font-family: 'Orbitron';">NUESTRA CARTA</h2>
+        <p class="text-white-50">Selecciona tu dosis de frescor neón.</p>
     </header>
 
     <section class="container py-5">
         <div class="row g-4">
             <div class="col-md-4 col-sm-6" th:each="producto : ${listaProductos}">
-                <div class="card-mojito h-100 border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img th:src="${producto.imagenUrl}" class="img-fluid w-100" style="height: 250px; object-fit: cover;" alt="Mojito">
-                        <span class="badge bg-dark position-absolute top-0 end-0 m-3 p-2" th:text="'Stock: ' + ${producto.stock}">10</span>
-                    </div>
-                    
-                    <div class="card-info p-4 text-center">
-                        <h3 class="h4 fw-bold mb-2" th:text="${producto.nombre}">Mojito</h3>
-                        <p class="text-muted small mb-3" th:text="${producto.descripcion}">Descripción del sabor.</p>
-                        <div class="price mb-4" th:text="'$' + ${#numbers.formatInteger(producto.precio, 0, 'POINT')}">5.000</div>
+                <div class="card-mojito h-100">
+                    <img th:src="${producto.imagenUrl}" class="w-100" style="height: 250px; object-fit: cover;" alt="Mojito">
+                    <div class="p-4 text-center">
+                        <h3 class="h4 fw-bold mb-2" th:text="${producto.nombre}"></h3>
+                        <p class="text-muted small" th:text="${producto.descripcion}"></p>
+                        <div class="price mb-4" th:text="'$' + ${producto.precio}"></div>
                         
-                        <form th:action="@{/carrito/agregar}" method="POST" class="mt-auto">
+                        <form th:action="@{/carrito/agregar}" method="POST">
                             <input type="hidden" name="id" th:value="${producto.id}">
                             <div class="input-group mb-3">
-                                <span class="input-group-text bg-white">Cant.</span>
-                                <input type="number" name="cantidad" value="1" min="1" th:max="${producto.stock}" class="form-control text-center shadow-none">
+                                <span class="input-group-text">CANT.</span>
+                                <input type="number" name="cantidad" value="1" min="1" class="form-control text-center">
                             </div>
-                            <button type="submit" class="btn btn-primary-custom w-100" th:disabled="${producto.stock <= 0}">
-                                <i class="fa-solid fa-plus me-2"></i> 
-                                <span th:text="${producto.stock > 0 ? 'Agregar al Pedido' : 'Agotado'}">Agregar</span>
-                            </button>
+                            <button type="submit" class="btn btn-neon-blue w-100">AGREGAR AL PEDIDO</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Mojito Master. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

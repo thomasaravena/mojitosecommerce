@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin/fragments :: head}"></th:block>
+    <title>Neon Admin | Formulario</title>
+    <style>
+        .form-control {
+            background: #222 !important;
+            border: 1px solid #444 !important;
+            color: white !important;
+        }
+        .form-control:focus {
+            background: #252525 !important;
+            border-color: var(--neon-blue) !important;
+            box-shadow: 0 0 10px var(--neon-blue) !important;
+        }
+        label { font-family: 'Orbitron'; font-size: 0.8rem; color: var(--neon-blue); margin-top: 15px; }
+        ::placeholder { color: #555 !important; }
+    </style>
+</head>
+<body>
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+
+    <main class="main-content">
+        <div class="container" style="max-width: 700px;">
+            <h2 class="neon-text-purple mb-4" style="font-family: 'Orbitron'; letter-spacing: 2px;">
+                [[${producto.id == null ? 'REGISTRAR MOJITO' : 'EDITAR MOJITO'}]]
+            </h2>
+            
+            <div class="neon-card">
+                <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <label>NOMBRE DEL SABOR</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" placeholder="Ej: Mojito Berries" required>
+
+                    <label>DESCRIPCIÓN</label>
+                    <textarea th:field="*{descripcion}" class="form-control" rows="3" placeholder="Ingredientes o notas de cata..."></textarea>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>PRECIO UNITARIO ($)</label>
+                            <input type="number" th:field="*{precio}" class="form-control" required min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label>STOCK DISPONIBLE</label>
+                            <input type="number" th:field="*{stock}" class="form-control" required min="0">
+                        </div>
+                    </div>
+
+                    <label>URL DE LA IMAGEN (URL PÚBLICA)</label>
+                    <input type="text" th:field="*{imagenUrl}" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+
+                    <div class="mt-5 d-flex justify-content-between">
+                        <a th:href="@{/admin/productos}" class="btn btn-outline-secondary px-4 text-white">VOLVER</a>
+                        <button type="submit" class="btn btn-neon-blue px-5" style="border: 2px solid var(--neon-blue); color: white;">
+                            [[${producto.id == null ? 'CREAR MOJITO' : 'GUARDAR CAMBIOS'}]]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

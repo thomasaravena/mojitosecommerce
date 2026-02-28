@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin/fragments :: head}"></th:block>
+    <title>Neon Admin | Inventario</title>
+</head>
+<body>
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+
+    <main class="main-content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h2 class="neon-text-purple fw-bold" style="font-family: 'Orbitron';">GESTIÓN DE STOCK</h2>
+                <a th:href="@{/admin/productos/nuevo}" class="btn btn-neon-blue">
+                    <i class="fa-solid fa-plus me-2"></i>NUEVO MOJITO
+                </a>
+            </div>
+
+            <div class="neon-card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr class="neon-text-green" style="font-family: 'Orbitron'; font-size: 0.8rem;">
+                                <th>IMAGEN</th>
+                                <th>PRODUCTO</th>
+                                <th>PRECIO</th>
+                                <th>STOCK</th>
+                                <th class="text-center">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${productos}">
+                                <td><img th:src="${p.imagenUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid var(--neon-blue);"></td>
+                                <td class="fw-bold text-white" th:text="${p.nombre}"></td>
+                                <td th:text="'$' + ${p.precio}" class="neon-text-blue"></td>
+                                <td>
+                                    <span th:class="${p.stock < 5} ? 'text-danger fw-bold' : 'text-white'" 
+                                          th:text="${p.stock} + ' un.'"></span>
+                                </td>
+                                <td class="text-center">
+                                    <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}" class="btn btn-outline-info btn-sm me-2" style="border-radius: 50%">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <a th:href="@{/admin/productos/eliminar/{id}(id=${p.id})}" class="btn btn-outline-danger btn-sm" style="border-radius: 50%" 
+                                       onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
