@@ -1,30 +1,43 @@
 package cl.thomas.mojitosecommerce.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 
 import cl.thomas.mojitosecommerce.entity.Producto;
 import cl.thomas.mojitosecommerce.service.ProductoService;
 
 @Controller
-@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
-
+    
+    
+    @GetMapping("/productos")
+    public String verPaginaDeProductos(Model model) {
+        // 1. Obtenemos los datos del servicio y filtramos por estado activo
+        List<Producto> lista = productoService.listarTodos().stream()
+                .toList();
+        
+        // 2. Pasamos la lista al HTML usando el "model"
+        // El atributo "listadoDePlanes" es el que debe ser recorrido en Thymeleaf
+        model.addAttribute("listadoDePlanes", lista);
+        
+        // 3. Devolvemos el nombre del archivo HTML
+        return "productos"; 
+    }
+/**
     // 1. LISTAR PRODUCTOS (Vista Administración)
     @GetMapping("/admin")
     public String listarAdmin(Model model) {
         model.addAttribute("productos", productoService.listarTodos());
-        return "admin/productos-list"; // Ruta a tu carpeta de plantillas
+        return "productos"; // Ruta a tu carpeta de plantillas
     }
 
     // 2. MOSTRAR FORMULARIO DE CREACIÓN
@@ -70,5 +83,5 @@ public class ProductoController {
             flash.addFlashAttribute("mensajeError", "No se pudo eliminar el producto.");
         }
         return "redirect:/productos/admin";
-    }
+    }**/
 }
