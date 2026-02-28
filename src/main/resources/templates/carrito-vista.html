@@ -1,142 +1,197 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tu Selección de Amor | CitaIdeal.cl</title>
+<title>Tu Pedido | Mojito Master Neon</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="stylesheet" th:href="@{/assets/css/base.css}">
-<link rel="stylesheet" th:href="@{/assets/css/layout.css}">
-<link rel="stylesheet" th:href="@{/assets/css/animations.css}">
-<link rel="stylesheet" th:href="@{/assets/css/components.css}">
-<link rel="stylesheet" th:href="@{/assets/css/login.css}">
+<style>
+:root {
+	--neon-blue: #00f3ff;
+	--neon-purple: #bc13fe;
+	--neon-green: #39ff14;
+	--dark-bg: #050505;
+	--card-bg: #111;
+}
+
+body {
+	background-color: var(--dark-bg);
+	color: white;
+	font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.glass-nav {
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid #333;
+}
+
+.neon-text {
+	text-shadow: 0 0 10px var(--neon-blue);
+	color: var(--neon-blue);
+	font-family: 'Orbitron', sans-serif;
+}
+
+.cart-card {
+	background: var(--card-bg);
+	border: 1px solid #333;
+	border-radius: 15px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.table {
+	color: white;
+	border-color: #333;
+}
+
+.table thead th {
+	border-bottom: 2px solid var(--neon-purple);
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	letter-spacing: 1px;
+}
+
+.price-text {
+	color: var(--neon-green);
+	font-weight: bold;
+}
+
+.btn-neon-blue {
+	background: transparent;
+	border: 1px solid var(--neon-blue);
+	color: var(--neon-blue);
+	transition: 0.3s;
+}
+
+.btn-neon-blue:hover {
+	background: var(--neon-blue);
+	color: black;
+	box-shadow: 0 0 15px var(--neon-blue);
+}
+
+.btn-checkout {
+	background: var(--neon-purple);
+	color: white;
+	border: none;
+	box-shadow: 0 0 15px var(--neon-purple);
+}
+
+.btn-checkout:hover {
+	background: #9d0fd4;
+	color: white;
+	box-shadow: 0 0 25px var(--neon-purple);
+}
+
+.product-img {
+	border-radius: 8px;
+	border: 1px solid #444;
+	object-fit: cover;
+}
+</style>
 </head>
 <body>
 
-	<nav
-		class="navbar navbar-expand-lg navbar-light sticky-top navbar-cielo">
-		<div id="contenedor-avion">
-			<div id="mensaje-avion">
-				<span>¡Eres el lugar al que siempre quiero volver! ❤️</span>
-			</div>
-			<img th:src="@{/assets/img/avion-de-papel.png}" id="imagen-avion"
-				alt="Avión">
-		</div>
-
-		<a class="navbar-brand fw-bold" href="/productos"
-			style="color: var(--deep-love); z-index: 20;"> <i
-			class="bi bi-heart-fill me-2"></i>Tu Cita Ideal
-		</a>
-
-		<div class="ms-auto" style="z-index: 20;">
-			<a href="/productos"
-				class="btn btn-outline-secondary btn-sm rounded-pill"> <i
-				class="bi bi-arrow-left me-1"></i>Volver a Experiencias
+	<nav class="navbar navbar-expand-lg fixed-top glass-nav">
+		<div class="container">
+			<a class="navbar-brand text-white fw-bold" th:href="@{/productos}">
+				MOJITO<span style="color: var(--neon-blue)">MASTER</span>
 			</a>
-		</div>
+			<div class="ms-auto">
+				<a th:href="@{/productos}"
+					class="btn btn-neon-blue btn-sm rounded-pill"> <i
+					class="bi bi-plus-lg me-1"></i>SEGUIR COMPRANDO
+				</a>
+			</div>
 		</div>
 	</nav>
 
-	<main class="container my-5">
-		<div class="header-section text-center mb-5 reveal">
-			<h2 class="display-5 fw-bold" style="color: var(--deep-love);">Tu
-				Selección de Amor</h2>
-			<div class="divider mx-auto"></div>
-			<p class="text-muted mt-3 italic">Revisa los detalles de tu
-				próxima aventura romántica</p>
+	<main class="container py-5 mt-5">
+		<div class="text-center mb-5">
+			<h2 class="display-5 fw-bold neon-text">TU PEDIDO ACTUAL</h2>
+			<p class="text-white-50">Revisa tu selección antes de preparar la
+				barra.</p>
 		</div>
 
 		<div th:if="${#lists.isEmpty(carrito)}" class="text-center py-5">
 			<div class="mb-4">
-				<i class="bi bi-cart-x"
-					style="font-size: 4rem; color: var(--romance-pink);"></i>
+				<i class="bi bi-cup-straw"
+					style="font-size: 4rem; color: var(--neon-purple);"></i>
 			</div>
-			<h3>Aún no has elegido una experiencia</h3>
-			<p class="text-muted">¡No dejes pasar la oportunidad de crear un
-				recuerdo inolvidable!</p>
-			<a href="/productos" class="btn btn-romance mt-3 px-5">Explorar
-				Experiencias</a>
+			<h3>Tu barra está vacía</h3>
+			<p class="text-white-50">¿Aún no has elegido tu dosis de frescor
+				neón?</p>
+			<a th:href="@{/productos}" class="btn btn-neon-blue mt-3 px-5">VER
+				CARTA</a>
 		</div>
 
-		<div th:unless="${#lists.isEmpty(carrito)}"
-			class="card cart-carrito shadow-sm p-4 border-0">
+		<div th:unless="${#lists.isEmpty(carrito)}" class="cart-card p-4">
 			<div class="table-responsive">
-				<table class="table cart-table align-middle">
+				<table class="table align-middle">
 					<thead>
 						<tr>
-							<th>Experiencia Seleccionada</th>
-							<th class="text-center">Precio Unitario</th>
-							<th class="text-center">Cantidad</th>
+							<th>Producto</th>
+							<th>Descripción</th>
+							<th class="text-center">Precio</th>
+							<th class="text-center">Cant.</th>
 							<th class="text-center">Subtotal</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="item : ${carrito}">
+							<td><img th:src="${item.producto.imagenUrl}" width="70"
+								height="70" class="product-img" alt="Trago"></td>
 							<td>
-								<div class="d-flex align-items-center">
-
-									<div class="ms-3">
-										<h6 class="mb-0 fw-bold" th:text="${item.plan.nombre}">Nombre</h6>
-										<small class="text-muted">Reserva inmediata</small>
-									</div>
-								</div>
+								<div class="fw-bold" th:text="${item.producto.nombre}">Nombre</div>
+								<small class="text-white-50 d-block"
+								th:text="${item.producto.descripcion}"></small>
 							</td>
-							<td class="text-center"><span
-								th:text="'$' + ${#numbers.formatDecimal(item.plan.precioBase, 0, 'POINT', 0, 'COMMA')}"></span>
-							</td>
-							<td class="text-center">
-								<div class="badge bg-light text-dark p-2 border">
-									<span th:text="${item.cantidad}">1</span>
-								</div>
-							</td>
-							<td class="text-center fw-bold text-dark"><span
-								th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')}"></span>
-							</td>
+							<td class="text-center price-text"
+								th:text="'$' + ${#numbers.formatInteger(item.producto.precio, 0, 'POINT')}"></td>
+							<td class="text-center" th:text="${item.cantidad}">1</td>
+							<td class="text-center price-text"
+								th:text="'$' + ${#numbers.formatInteger(item.subtotal, 0, 'POINT')}"></td>
 							<td class="text-end"><a
-								th:href="@{/carrito/eliminar/{id}(id=${item.plan.id})}"
-								class="btn btn-delete" title="Quitar del carrito"> <i
-									class="bi bi-trash3-fill"></i>
+								th:href="@{/carrito/eliminar/{id}(id=${item.producto.id})}"
+								class="text-danger"> <i class="fa-solid fa-trash-can fa-lg"></i>
 							</a></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 
-			<div class="row mt-5 align-items-end">
+			<div class="row mt-5 align-items-center">
 				<div class="col-md-6 mb-4 mb-md-0">
-					<div class="p-3 bg-light rounded-4">
-						<small class="fw-bold text-uppercase d-block mb-2">Información
-							importante:</small>
-						<p class="small text-muted mb-0">
-							<i class="bi bi-info-circle me-1"></i> Todas las reservas están
-							sujetas a confirmación de fecha disponibilidad.
-
-						</p>
+					<div class="p-3 border border-secondary rounded-3">
+						<small class="fw-bold text-uppercase d-block mb-1"
+							style="color: var(--neon-purple);">Nota de Barra:</small>
+						<p class="small text-white-50 mb-0">Los pedidos se procesan de
+							inmediato. Asegúrate de que todos tus productos sean los
+							correctos.</p>
 					</div>
 				</div>
 				<div class="col-md-6 text-md-end">
-					<h5 class="cart-total-label mb-1">Total a Pagar:</h5>
-					<div class="cart-total-amount mb-4"
-						th:text="'$' + ${#numbers.formatDecimal(totalCarrito, 0, 'POINT', 0, 'COMMA')}">
+					<h5 class="text-white-50 mb-1">TOTAL A PAGAR:</h5>
+					<div class="display-5 fw-bold mb-4"
+						style="color: var(--neon-green);"
+						th:text="'$' + ${#numbers.formatInteger(totalCarrito, 0, 'POINT')}">
 						$0</div>
 					<div
 						class="d-flex flex-column flex-md-row justify-content-md-end gap-3">
-						<a href="/productos"
-							class="btn btn-outline-secondary rounded-pill px-4"> <i
-							class="bi bi-plus-lg me-1"></i> Añadir Más
-						</a> <a href="/carrito/vaciar"
+						<a th:href="@{/carrito/vaciar}"
 							class="btn btn-outline-danger rounded-pill px-4"
-							onclick="return confirm('¿Estás seguro de que quieres quitar todos los planes?')">
-							<i class="bi bi-trash-fill me-1"></i> Vaciar Carrito
-						</a> <a th:href="@{/carrito/checkout}"
-							class="btn btn-romance btn-lg px-5 shadow rounded-pill">
-							Confirmar Reserva <i class="bi bi-arrow-right ms-2"></i>
+							onclick="return confirm('¿Limpiar toda la selección?')"> <i
+							class="bi bi-x-circle me-1"></i> VACIAR
+						</a> <a th:href="@{/carrito/finalizar}"
+							class="btn btn-checkout btn-lg px-5 rounded-pill fw-bold">
+							FINALIZAR PEDIDO <i class="bi bi-lightning-charge-fill ms-2"></i>
 						</a>
 					</div>
 				</div>
@@ -144,22 +199,11 @@
 		</div>
 	</main>
 
-	<footer class="py-4 mt-5 border-top ">
-		<div class="container text-center">
-			<p class="text-muted small mb-0">
-				&copy; 2026 Tu Cita Ideal <i class="bi bi-heart-fill text-danger"></i>
-				para momentos especiales
-			</p>
+	<footer class="py-4 mt-5 border-top border-secondary">
+		<div class="container text-center text-white-50 small">
+			<p>&copy; 2026 MOJITO MASTER NEON | Bebe con responsabilidad</p>
 		</div>
 	</footer>
-	<script th:src="@{/assets/js/scroll-reveal.js}"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script th:src="@{/assets/js/scroll-reveal.js}"></script>
-	<div class="background-container">
-		<span class="element">❤️</span> <span class="element">🌹</span> <span
-			class="element">❤️</span> <span class="element">🌹</span> <span
-			class="element">❤️</span>
-	</div>
+
 </body>
 </html>

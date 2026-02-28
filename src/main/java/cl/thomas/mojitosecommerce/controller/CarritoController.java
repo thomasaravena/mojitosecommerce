@@ -22,6 +22,9 @@ public class CarritoController {
     @Autowired
     private ProductoService productoService;
 
+    /**
+     * Agrega un PRODUCTO al carrito.
+     */
     @GetMapping("/agregar/{id}")
     public String agregarAlCarrito(@PathVariable Long id, HttpSession session) {
         @SuppressWarnings("unchecked")
@@ -35,7 +38,7 @@ public class CarritoController {
         if (productoDeseado != null) {
             boolean existe = false;
             for (ItemCarrito item : carrito) {
-                // Comparamos usando el objeto Producto y su ID
+                // Verificación: Usamos getProducto().getId()
                 if (item.getProducto().getId().equals(id)) {
                     item.setCantidad(item.getCantidad() + 1);
                     existe = true;
@@ -49,9 +52,13 @@ public class CarritoController {
         }
 
         session.setAttribute("carrito", carrito);
+        // Redirige a ver el carrito para confirmar la acción
         return "redirect:/carrito/ver";
     }
 
+    /**
+     * Muestra la vista del carrito con los totales.
+     */
     @GetMapping("/ver")
     public String verCarrito(Model model, HttpSession session) {
         @SuppressWarnings("unchecked")
@@ -63,7 +70,7 @@ public class CarritoController {
         
         int itemsCount = carrito.size();
         
-        // Uso de double para ser compatible con Producto.precio (Double)
+        // Cálculo del total usando el subtotal del ItemCarrito (que usa Producto)
         double total = carrito.stream()
                 .mapToDouble(ItemCarrito::getSubtotal)
                 .sum();
@@ -75,13 +82,16 @@ public class CarritoController {
         return "carrito-vista";
     }
 
+    /**
+     * Elimina un PRODUCTO del carrito.
+     */
     @GetMapping("/eliminar/{id}")
     public String eliminarDelCarrito(@PathVariable Long id, HttpSession session) {
         @SuppressWarnings("unchecked")
         List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
         
         if (carrito != null) {
-            // CORRECCIÓN: Se cambió getPlan() por getProducto() para coincidir con tu entidad
+            // CORREGIDO: apuntamos a item.getProducto().getId()
             carrito.removeIf(item -> item.getProducto().getId().equals(id));
             session.setAttribute("carrito", carrito);
         }
@@ -104,12 +114,10 @@ public class CarritoController {
             return "redirect:/productos";
         }
 
-        // Uso de double consistente con el resto del controlador
         double total = carrito.stream()
                 .mapToDouble(ItemCarrito::getSubtotal)
                 .sum();
 
-        // Nota: Asegúrate de tener la clase Reserva importada o creada
         // model.addAttribute("reserva", new Reserva()); 
         model.addAttribute("carrito", carrito); 
         model.addAttribute("totalCarrito", total);

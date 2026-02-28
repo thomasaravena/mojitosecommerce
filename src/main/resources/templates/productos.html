@@ -1,59 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Nuestra Carta | Mojito Master Neon</title>
-    <th:block th:replace="~{admin/fragments :: head}"></th:block>
-    <style>
-        .card-mojito { background: #111; border: 1px solid #333; transition: 0.4s; border-radius: 15px; overflow: hidden; }
-        .card-mojito:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
-        .price { color: var(--neon-green); font-family: 'Orbitron'; font-size: 1.4rem; }
-        .input-group-text { background: #222; border: 1px solid #444; color: var(--neon-blue); }
-        .form-control { background: #000; border: 1px solid #444; color: white; }
-    </style>
+<meta charset="UTF-8">
+<title>Nuestra Carta | Mojito Master Neon</title>
+<th:block th:replace="~{admin/fragments :: head}"></th:block>
+<style>
+.card-mojito {
+	background: #111;
+	border: 1px solid #333;
+	transition: 0.4s;
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+.card-mojito:hover {
+	border-color: var(--neon-blue);
+	box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+}
+
+.price {
+	color: var(--neon-green);
+	font-family: 'Orbitron';
+	font-size: 1.4rem;
+}
+
+.input-group-text {
+	background: #222;
+	border: 1px solid #444;
+	color: var(--neon-blue);
+}
+
+.form-control {
+	background: #000;
+	border: 1px solid #444;
+	color: white;
+}
+</style>
 </head>
 <body style="background-color: #050505; color: white;">
 
-    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
-        <div class="container">
-            <a class="navbar-brand text-white fw-bold" th:href="@{/}" style="font-family: 'Orbitron';">MOJITO<span style="color:var(--neon-blue)">MASTER</span></a>
-            <div class="ms-auto d-flex align-items-center">
-                <a th:href="@{/}" class="btn btn-neon-blue btn-sm me-3">INICIO</a>
-                <a th:href="@{/carrito/ver}" class="text-white position-relative">
-                    <i class="fa-solid fa-cart-shopping fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" th:text="${itemsCount}">0</span>
-                </a>
-            </div>
-        </div>
-    </nav>
+	<nav class="navbar navbar-expand-lg fixed-top glass-nav">
+		<div class="container">
+			<a class="navbar-brand text-white fw-bold" th:href="@{/}"
+				style="font-family: 'Orbitron';">MOJITO<span
+				style="color: var(--neon-blue)">MASTER</span></a>
+			<div class="ms-auto d-flex align-items-center">
+				<a th:href="@{/}" class="btn btn-neon-blue btn-sm me-3">INICIO</a> <a
+					th:href="@{/carrito/ver}" class="text-white position-relative">
+					<i class="fa-solid fa-cart-shopping fa-lg"></i> <span
+					class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+					th:text="${itemsCount}">0</span>
+				</a>
+			</div>
+		</div>
+	</nav>
 
-    <header class="py-5 mt-5 text-center">
-        <h2 class="display-4 fw-bold neon-text-purple" style="font-family: 'Orbitron';">NUESTRA CARTA</h2>
-        <p class="text-white-50">Selecciona tu dosis de frescor neón.</p>
-    </header>
+	<header class="py-5 mt-5 text-center">
+		<h2 class="display-4 fw-bold neon-text-purple"
+			style="font-family: 'Orbitron';">NUESTRA CARTA</h2>
+		<p class="text-white-50">Selecciona tu dosis de frescor neón.</p>
+	</header>
 
-    <section class="container py-5">
-        <div class="row g-4">
-            <div class="col-md-4 col-sm-6" th:each="producto : ${listaProductos}">
-                <div class="card-mojito h-100">
-                    <img th:src="${producto.imagenUrl}" class="w-100" style="height: 250px; object-fit: cover;" alt="Mojito">
-                    <div class="p-4 text-center">
-                        <h3 class="h4 fw-bold mb-2" th:text="${producto.nombre}"></h3>
-                        <p class="text-muted small" th:text="${producto.descripcion}"></p>
-                        <div class="price mb-4" th:text="'$' + ${producto.precio}"></div>
-                        
-                        <form th:action="@{/carrito/agregar}" method="POST">
-                            <input type="hidden" name="id" th:value="${producto.id}">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">CANT.</span>
-                                <input type="number" name="cantidad" value="1" min="1" class="form-control text-center">
-                            </div>
-                            <button type="submit" class="btn btn-neon-blue w-100">AGREGAR AL PEDIDO</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="container py-5">
+		<div class="row g-4">
+			<div class="col-md-4 col-sm-6" th:each="producto : ${listaProductos}">
+				<div class="card-mojito h-100">
+					<img th:src="${producto.imagenUrl}" class="w-100"
+						style="height: 250px; object-fit: cover;" alt="Mojito">
+					<div class="p-4 text-center">
+						<h3 class="h4 fw-bold mb-2" th:text="${producto.nombre}"></h3>
+						<p class="text-muted small" th:text="${producto.descripcion}"></p>
+						<div class="price mb-4"
+							th:text="'$' + ${#numbers.formatInteger(producto.precio, 0, 'POINT')}"></div>
+
+						<a th:href="@{/carrito/agregar/{id}(id=${producto.id})}"
+							class="btn btn-neon-blue w-100"> <i
+							class="fa-solid fa-plus me-2"></i>AGREGAR AL PEDIDO
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </body>
 </html>
