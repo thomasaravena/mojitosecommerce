@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/admin")
@@ -14,21 +19,18 @@ public class AdminController {
     @Autowired
     private ProductoService productoService;
 
-    // Listado Neón
     @GetMapping("/productos")
     public String panelAdmin(Model model) {
         model.addAttribute("productos", productoService.listarTodos());
         return "admin/productos-lista"; 
     }
 
-    // Formulario Nuevo
     @GetMapping("/productos/nuevo")
     public String formularioNuevo(Model model) {
         model.addAttribute("producto", new Producto());
         return "admin/producto-form";
     }
 
-    // Editar (Usa el service para buscar el existente)
     @GetMapping("/productos/editar/{id}")
     public String formularioEditar(@PathVariable Long id, Model model) {
         Producto producto = productoService.obtenerPorId(id);
@@ -36,14 +38,28 @@ public class AdminController {
         return "admin/producto-form";
     }
 
-    // Guardar (POST)
     @PostMapping("/productos/guardar")
-    public String guardarProducto(@ModelAttribute Producto producto) {
+    public String guardarProducto(@ModelAttribute Producto producto, @RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            // Ajustado a tu carpeta: static/assets/image
+            Path directorioImagenes = Paths.get("src//main//resources//static//assets//image");
+            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+
+            try {
+                byte[] bytesImg = file.getBytes();
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + file.getOriginalFilename());
+                Files.write(rutaCompleta, bytesImg);
+
+                // La URL que guardamos ahora incluye /assets/image/
+                producto.setImagenUrl("/assets/image/" + file.getOriginalFilename());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         productoService.guardar(producto);
         return "redirect:/admin/productos";
     }
 
-    // Eliminar
     @GetMapping("/productos/eliminar/{id}")
     public String eliminarProducto(@PathVariable Long id) {
         productoService.eliminar(id);
