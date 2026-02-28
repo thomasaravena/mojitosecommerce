@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,21 +43,32 @@ public class AdminController {
     @PostMapping("/productos/guardar")
     public String guardarProducto(@ModelAttribute Producto producto, @RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
-            // Ajustado a tu carpeta: static/assets/image
-            Path directorioImagenes = Paths.get("src//main//resources//static//assets//image");
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-
             try {
+                // 1. Definimos la ruta de la carpeta física
+                String folder = "src/main/resources/static/assets/image";
+                Path directorioImagenes = Paths.get(folder);
+                String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+
+                // 2. Obtenemos el nombre del archivo y creamos la ruta completa
                 byte[] bytesImg = file.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + file.getOriginalFilename());
+                Path rutaCompleta = Paths.get(rutaAbsoluta + File.separator + file.getOriginalFilename());
+                
+                // 3. Escribimos el archivo en el disco
                 Files.write(rutaCompleta, bytesImg);
 
-                // La URL que guardamos ahora incluye /assets/image/
+                // 4. Guardamos la URL relativa que Thymeleaf usará: /assets/image/nombre.jpg
                 producto.setImagenUrl("/assets/image/" + file.getOriginalFilename());
-            } catch (Exception e) {
+                
+            } catch (IOException e) {
+                System.out.println("Error al cargar la imagen: " + e.getMessage());
                 e.printStackTrace();
             }
+        } else if (producto.getId() != null) {
+            // Si estamos editando y no subimos foto nueva, mantenemos la anterior
+            Producto productoExistente = productoService.obtenerPorId(producto.getId());
+            producto.setImagenUrl(productoExistente.getImagenUrl());
         }
+
         productoService.guardar(producto);
         return "redirect:/admin/productos";
     }
