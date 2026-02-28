@@ -14,18 +14,43 @@
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top glass-nav">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/}"><span>Mojito</span>Master</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#sabores">Sabores</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-pedido" th:href="@{/pedidos}">Pedir Ahora</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div class="ms-auto d-flex align-items-center">
+
+				<div class="bienvenida me-3" sec:authorize="hasRole('ADMIN')">
+					<p class="mb-0">
+						Hola, <span th:text="${#authentication.name}">Usuario</span>
+					</p>
+				</div>
+
+				<div class="bienvenida me-3" sec:authorize="hasRole('USER')">
+					<p class="mb-0">
+						Hola, <span th:text="${#authentication.name}">Usuario</span>
+					</p>
+				</div>
+
+				<a href="/admin/planes" sec:authorize="hasRole('ADMIN')"
+					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
+				</a> <a th:href="@{/panel}" sec:authorize="hasRole('USER')"
+					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
+				</a> <a href="/carrito/ver" sec:authorize="hasRole('USER')"
+					class="btn btn-link text-dark position-relative p-0"> <i
+					class="bi bi-cart-fill fs-5"></i> <span
+					class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+					style="font-size: 0.6rem;" th:text="${itemsCount}"> 0 </span>
+				</a>
+				<div class="ms-auto">
+					<a th:href="@{/login}" sec:authorize="isAnonymous()"
+						class="btn btn-outline-light px-4 shadow-sm"> <i
+						class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+					</a>
+				</div>
+				<form sec:authorize="isAuthenticated()" th:action="@{/logout}"
+					method="post">
+					<button type="submit" class="btn btn-link btn-sm text-muted">Cerrar
+						Sesión</button>
+				</form>
+
+			</div>
     </nav>
 
     <header class="hero-section d-flex align-items-center">
